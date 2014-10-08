@@ -1,8 +1,7 @@
 spring3-jta-mybatis3
 ====================
-
 datasource的配置
-====================
+
 請修改MybatisDatabaseAConfig與MybatisDatabaseBConfig的DB連線設定
 <pre>
   @Bean(name = "dataSourceA", initMethod = "init" , destroyMethod = "close")
