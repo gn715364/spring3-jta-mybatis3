@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
+    xmlns:context="http://www.springframework.org/schema/context"  
+    xmlns:aop="http://www.springframework.org/schema/aop"  
+    xmlns:tx="http://www.springframework.org/schema/tx"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans  
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd  
+           http://www.springframework.org/schema/aop   
+           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd  
+           http://www.springframework.org/schema/tx  
+           http://www.springframework.org/schema/tx/spring-tx-3.2.xsd  
+           http://www.springframework.org/schema/context  
+           http://www.springframework.org/schema/context/spring-context-3.2.xsd"> 
+    <aop:aspectj-autoproxy />  
+  
+    <aop:config  proxy-target-class="true">  
+        <aop:advisor pointcut="execution(* *com.gn.web.service..*(..))"  advice-ref="txAdvice" />
+    </aop:config>      
+  	<!-- 
+		ISOLATION_DEFAULT 
+		使用底層資料庫預設的隔離層級
+		 
+		ISOLATION_READ_COMMITTED 
+		允許交易讀取其它並行的交易已經送出（Commit）的資料欄位，可以防止Dirty read問題
+		
+		ISOLATION_READ_UNCOMMITTED 
+		允許交易讀取其它並行的交易還沒送出的資料，會發生Dirty、Nonrepeatable、Phantom read等問題
+		
+		ISOLATION_REPEATABLE_READ 
+		要求多次讀取的資料必須相同，除非交易本身更新資料，可防止Dirty、Nonrepeatable read問題
+		 
+		ISOLATION_SERIALIZABLE
+		完整的隔離層級，可防止Dirty、Nonrepeatable、Phantom read等問題，會鎖定對應的資料表格，因而有效能問題 
+  	 -->
+      <tx:advice id="txAdvice" transaction-manager="springTransactionManager">  
+        <tx:attributes>  
+            <tx:method name="*"  propagation="REQUIRED"  isolation="DEFAULT" read-only="true" />   
+            <tx:method name="*"  propagation="REQUIRED" rollback-for="Exception"  isolation="DEFAULT" />  
+        </tx:attributes>  
+    </tx:advice>   
+<!--
+    <tx:annotation-driven transaction-manager="springTransactionManager"/>   -->
+
+</beans>
